@@ -1,0 +1,28 @@
+ifdef CI
+	GOLANGCI_LINT_FLAGS=
+else
+	GOLANGCI_LINT_FLAGS=--fix
+endif
+
+run:
+	@go run main.go
+
+build:
+	@go build -o build/main main.go
+
+test:
+	@go test ./... -v
+
+lint:
+	@golangci-lint run $(GOLANGCI_LINT_FLAGS)
+
+format:
+	@golangci-lint run --no-config --disable-all --enable gofmt $(GOLANGCI_LINT_FLAGS)
+
+clean:
+	@rm -rf build/
+
+setup:
+	@go mod tidy
+
+.PHONY: run build test lint format clean setup

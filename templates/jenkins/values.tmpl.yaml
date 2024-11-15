@@ -1,0 +1,27 @@
+jenkins-operator:
+  jenkins:
+    image: jenkins/jenkins:2.462.3-lts
+    labels:
+      release: devops
+    basePlugins:
+      - name: configuration-as-code
+        version: "1850.va_a_8c31d3158b_"
+      - name: git
+        version: "5.5.2"
+      - name: job-dsl
+        version: "1.89"
+      - name: kubernetes
+        version: "4295.v7fa_01b_309c95"
+      - name: kubernetes-credentials-provider
+        version: 1.262.v2670ef7ea_0c5
+      - name: workflow-aggregator
+        version: 600.vb_57cdd26fdd7
+      - name: workflow-job
+        version: 1436.vfa_244484591f
+{{ if has "prometheus" .Apps }}
+    plugins:
+      - name: prometheus
+        version: 795.v995762102f28
+      - name: cloudbees-disk-usage-simple
+        version: 232.v713eeed2e1f4
+{{ end }}

@@ -1,0 +1,40 @@
+HELM_FLAGS=
+{{ if has "jenkins" .Apps -}}
+HELM_FLAGS+=-f jenkins.values.yaml
+{{- end }}
+{{ if has "prometheus" .Apps -}}
+HELM_FLAGS+=-f prometheus.values.yaml
+{{- end }}
+{{ if has "loki" .Apps -}}
+HELM_FLAGS+=-f loki.values.yaml
+{{- end }}
+
+setup:
+	helm dependency update
+
+install:
+	helm install devops . $(HELM_FLAGS)
+
+upgrade:
+	helm upgrade devops . $(HELM_FLAGS)
+
+uninstall:
+	helm uninstall devops
+
+{{ if has "jenkins" .Apps -}}
+jenkins-credentials:
+	@minikube kubectl -- get secret jenkins-operator-credentials-jenkins -o 'jsonpath={.data.user}' | base64 -d
+	@echo ""
+	@minikube kubectl -- get secret jenkins-operator-credentials-jenkins -o 'jsonpath={.data.password}' | base64 -d
+	@echo ""
+
+jenkins-connect:
+	@minikube kubectl -- port-forward jenkins-jenkins 8080:8080
+{{- end }}
+
+grafana-connect:
+	@minikube kubectl -- port-forward jenkins-jenkins 8080:8080
+
+grafana-credentials:
+	@minikube kubectl -- get secret devops-grafana -o 'jsonpath={.data.user}' | base64 -d
+	@echo ""
