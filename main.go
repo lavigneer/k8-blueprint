@@ -25,8 +25,8 @@ var jenkinsValuesTemplate string
 //go:embed templates/prometheus/values.tmpl.yaml
 var prometheusValuesTemplate string
 
-//go:embed templates/loki/values.tmpl.yaml
-var lokiValuesTemplate string
+//go:embed templates/meta-monitoring/values.tmpl.yaml
+var metaMonitoringValuesTemplate string
 
 type FormData struct {
 	dirFs fs.FS
@@ -98,15 +98,15 @@ func writePrometheusValues(formData FormData) {
 	}
 }
 
-func writeLokiValues(formData FormData) {
-	if !slices.Contains(formData.Apps, "loki") {
+func writeMetaMonitoringValues(formData FormData) {
+	if !slices.Contains(formData.Apps, "meta-monitoring") {
 		return
 	}
-	t, err := template.New("").Funcs(sprig.FuncMap()).Parse(lokiValuesTemplate)
+	t, err := template.New("").Funcs(sprig.FuncMap()).Parse(metaMonitoringValuesTemplate)
 	if err != nil {
 		log.Fatal(err)
 	}
-	f, err := os.OpenFile("fake-repo/loki.values.yaml", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o666)
+	f, err := os.OpenFile("fake-repo/meta-monitoring.values.yaml", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o666)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -124,8 +124,8 @@ func main() {
 				Title("What applications do you want to install?").
 				Options(
 					huh.NewOption("Jenkins", "jenkins"),
-					huh.NewOption("Prometheus", "prometheus"),
-					huh.NewOption("Loki", "loki"),
+					// huh.NewOption("Prometheus", "prometheus"),
+					huh.NewOption("Meta Monitoring", "meta-monitoring"),
 				).
 				Value(&formData.Apps),
 		),
@@ -139,5 +139,5 @@ func main() {
 	writeMakefile(formData)
 	writeJenkinsValues(formData)
 	writePrometheusValues(formData)
-	writeLokiValues(formData)
+	writeMetaMonitoringValues(formData)
 }

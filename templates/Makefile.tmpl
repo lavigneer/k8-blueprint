@@ -5,21 +5,23 @@ HELM_FLAGS+=-f jenkins.values.yaml
 {{ if has "prometheus" .Apps -}}
 HELM_FLAGS+=-f prometheus.values.yaml
 {{- end }}
-{{ if has "loki" .Apps -}}
-HELM_FLAGS+=-f loki.values.yaml
+{{ if has "meta-monitoring" .Apps -}}
+HELM_FLAGS+=-f meta-monitoring.values.yaml
 {{- end }}
 
 setup:
 	helm dependency update
+	minikube kubectl -- create namespace devops || true
+	minikube kubectl -- create secret generic minio -n devops --from-literal=rootPassword=admin123 --from-literal=rootUser=admin
 
 install:
-	helm install devops . $(HELM_FLAGS)
+	helm install -n devops devops . $(HELM_FLAGS)
 
 upgrade:
-	helm upgrade devops . $(HELM_FLAGS)
+	helm upgrade -n devops devops . $(HELM_FLAGS)
 
 uninstall:
-	helm uninstall devops
+	helm uninstall -n devops devops
 
 {{ if has "jenkins" .Apps -}}
 jenkins-credentials:

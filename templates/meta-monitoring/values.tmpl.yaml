@@ -1,0 +1,103 @@
+meta-monitoring:
+  cloud:
+    logs:
+      enabled: false
+    metrics:
+      enabled: false
+    traces:
+      enabled: false
+
+  local:
+    grafana:
+      enabled: true
+    logs:
+      enabled: true
+    metrics:
+      enabled: true
+    traces:
+      enabled: true
+    minio:
+      enabled: true
+
+  loki:
+    deploymentMode: SingleBinary
+
+  mimir-distributed:
+    alertmanager:
+      persistentVolume:
+        enabled: true
+      replicas: 1
+      statefulSet:
+        enabled: true
+      zoneAwareReplication:
+        enabled: false
+
+    compactor:
+      persistentVolume:
+        size: 2Gi
+
+    distributor:
+      replicas: 1
+
+    ingester:
+      persistentVolume:
+        size: 5Gi
+      replicas: 1
+      zoneAwareReplication:
+        enabled: false
+
+    admin-cache:
+      enabled: true
+      replicas: 1
+
+    chunks-cache:
+      enabled: true
+      replicas: 1
+
+    index-cache:
+      enabled: true
+      replicas: 1
+
+    metadata-cache:
+      enabled: true
+
+    results-cache:
+      enabled: true
+
+    minio:
+      enabled: false
+
+    overrides_exporter:
+      replicas: 1
+
+    querier:
+      replicas: 1
+
+    query_frontend:
+      replicas: 1
+
+    query_scheduler:
+      replicas: 1
+
+    ruler:
+      replicas: 1
+
+    ruler_querier:
+      replicas: 1
+
+    ruler_query_scheduler:
+      replicas: 1
+
+    store_gateway:
+      persistentVolume:
+        size: 1Gi
+      replicas: 1
+      zoneAwareReplication:
+        enabled: false
+
+    nginx:
+      replicas: 1
+
+    gateway:
+      replicas: 1
+      

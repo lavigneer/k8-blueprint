@@ -3,3 +3,5 @@ kube-prometheus-stack:
     prometheusSpec:
       podMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
+  grafana:
+    enabled: false
