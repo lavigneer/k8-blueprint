@@ -124,7 +124,7 @@ func main() {
 				Title("What applications do you want to install?").
 				Options(
 					huh.NewOption("Jenkins", "jenkins"),
-					// huh.NewOption("Prometheus", "prometheus"),
+					huh.NewOption("Prometheus", "prometheus"),
 					huh.NewOption("Meta Monitoring", "meta-monitoring"),
 				).
 				Value(&formData.Apps),

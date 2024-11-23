@@ -25,18 +25,12 @@ uninstall:
 
 {{ if has "jenkins" .Apps -}}
 jenkins-credentials:
-	@minikube kubectl -- get secret jenkins-operator-credentials-jenkins -o 'jsonpath={.data.user}' | base64 -d
+	@minikube kubectl -- -n devops get secret jenkins-operator-credentials-jenkins -o 'jsonpath={.data.user}' | base64 -d
 	@echo ""
-	@minikube kubectl -- get secret jenkins-operator-credentials-jenkins -o 'jsonpath={.data.password}' | base64 -d
+	@minikube kubectl -- -n devops get secret jenkins-operator-credentials-jenkins -o 'jsonpath={.data.password}' | base64 -d
 	@echo ""
 
 jenkins-connect:
-	@minikube kubectl -- port-forward jenkins-jenkins 8080:8080
+	@minikube kubectl -- -n devops port-forward jenkins-jenkins 8080:8080
 {{- end }}
 
-grafana-connect:
-	@minikube kubectl -- port-forward jenkins-jenkins 8080:8080
-
-grafana-credentials:
-	@minikube kubectl -- get secret devops-grafana -o 'jsonpath={.data.user}' | base64 -d
-	@echo ""

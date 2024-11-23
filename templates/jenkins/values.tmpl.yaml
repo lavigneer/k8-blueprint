@@ -1,6 +1,7 @@
 jenkins-operator:
   jenkins:
     image: jenkins/jenkins:2.462.3-lts
+    namespace: devops
     labels:
       release: devops
     basePlugins:
